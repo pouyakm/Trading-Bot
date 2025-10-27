@@ -1,0 +1,54 @@
+<Solution>
+  <Folder Name="/Backtester-Module/">
+    <Project Path="Backtester/Backtester.csproj" Id="46f9ca7f-56c6-4240-a4e3-cf94eb17bf22" />
+  </Folder>
+  <Folder Name="/Backtester-Module/Trainer(ML Pipeline)/">
+    <File Path="LSTM_Model/train_and_predict.py" />
+  </Folder>
+  <Folder Name="/Configuration-Layer/" />
+  <Folder Name="/Docs/">
+    <File Path="ReadMe.txt" />
+  </Folder>
+  <Folder Name="/ML/" />
+  <Folder Name="/ML/Models/" />
+  <Folder Name="/ML/Training/" />
+  <Folder Name="/Observability-Layer/" />
+  <Folder Name="/Persistence Layer/">
+    <Project Path="Infrastructure/Infrastructure.csproj" Id="28e55584-2bcb-4758-b29e-ccabc09963e0" />
+  </Folder>
+  <Folder Name="/Scripts/">
+    <File Path="SqlQuery.sql" />
+  </Folder>
+  <Folder Name="/Services/" />
+  <Folder Name="/Services/Api-Gateway/">
+    <Project Path="ApiGateway/ApiGateway.csproj" Id="559a0b7e-a845-49b9-99cc-f92b43b882f7" />
+  </Folder>
+  <Folder Name="/Services/Market-Adapter/">
+    <Project Path="MarketAdapter/MarketAdapter.csproj" Id="ae2d7eeb-78d4-4cf7-aae3-35d73ff28c37" />
+  </Folder>
+  <Folder Name="/Services/Market-Adapter/DataCollector/">
+    <File Path="LSTM_Model/collect_data.py" />
+  </Folder>
+  <Folder Name="/Services/Order-Manager/">
+    <Project Path="OrderManager/OrderManager.csproj" Id="386f0792-f0df-4910-8ac3-9fc5bae30a07" />
+  </Folder>
+  <Folder Name="/Services/Order-Manager/Exchange Connector/" />
+  <Folder Name="/Services/Risk-Manager/">
+    <Project Path="RiskManager/RiskManager.csproj" Id="58f6ba1b-d297-4cb4-bf8a-6575f1735b82" />
+  </Folder>
+  <Folder Name="/Services/Strategy-Engine/">
+    <Project Path="ScalpBot/ScalpBot.csproj" />
+  </Folder>
+  <Folder Name="/Services/Strategy-Engine/AI Submodule/">
+    <File Path="LSTM_Model/train_and_predict.py" />
+  </Folder>
+  <Folder Name="/Services/Strategy-Engine/Indicators Submodule/">
+    <File Path="ScalpBot/modules/Indicators.cs" />
+  </Folder>
+  <Folder Name="/Services/Strategy-Engine/SignalLogicLayer/">
+    <File Path="ScalpBot/modules/Analyzer.cs" />
+  </Folder>
+  <Folder Name="/Services/UI/">
+    <Project Path="App/App.csproj" Id="75ad5540-9288-42aa-b301-ace1dc69c9f4" />
+  </Folder>
+</Solution>
