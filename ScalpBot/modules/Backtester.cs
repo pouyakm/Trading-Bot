@@ -29,12 +29,13 @@ public class Backtester
 
     public async Task RunAsync(string symbol, string interval = "1m", int limit = 1000)
     {
-        Console.WriteLine($"🔹 شروع بک‌تست برای {symbol} با {limit} کندل...");
+        var analyzer = new Analyzer();
+        Console.WriteLine($"Starting... {symbol} with {limit} Klines...");
 
         var candles = await FetchHistoricalData(symbol, interval, limit);
         if (candles.Count < 50)
         {
-            Console.WriteLine("داده کافی نیست!");
+            Console.WriteLine("Data Not Enough!");
             return;
         }
 

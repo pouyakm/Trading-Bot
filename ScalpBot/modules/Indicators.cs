@@ -97,4 +97,78 @@ public static class Indicators
         decimal lower = sma - multiplier * stdDev;
         return (upper, sma, lower);
     }
+
+    public static List<decimal> PSAR(List<decimal> high, List<decimal> low, decimal step = 0.02m, decimal max = 0.2m)
+    {
+        if (high.Count != low.Count)
+            throw new ArgumentException("High and Low lists must have the same length");
+
+        int length = high.Count;
+        List<decimal> psar = new List<decimal>(new decimal[length]);
+        bool isUptrend = true;
+
+        decimal af = step; // acceleration factor
+        decimal ep = high[0]; // extreme point
+        psar[0] = low[0]; // initial PSAR
+
+        for (int i = 1; i < length; i++)
+        {
+            decimal prevPsar = psar[i - 1];
+            decimal currPsar = prevPsar + af * (ep - prevPsar);
+
+            if (isUptrend)
+            {
+                if (low[i] < currPsar)
+                {
+                    // trend reversal
+                    isUptrend = false;
+                    psar[i] = ep;
+                    ep = low[i];
+                    af = step;
+                }
+                else
+                {
+                    psar[i] = currPsar;
+                    if (high[i] > ep)
+                    {
+                        ep = high[i];
+                        af = Math.Min(af + step, max);
+                    }
+                }
+            }
+            else
+            {
+                if (high[i] > currPsar)
+                {
+                    // trend reversal
+                    isUptrend = true;
+                    psar[i] = ep;
+                    ep = high[i];
+                    af = step;
+                }
+                else
+                {
+                    psar[i] = currPsar;
+                    if (low[i] < ep)
+                    {
+                        ep = low[i];
+                        af = Math.Min(af + step, max);
+                    }
+                }
+            }
+
+            // ensure PSAR doesn't cross highs/lows
+            if (isUptrend)
+            {
+                psar[i] = Math.Min(psar[i], Math.Min(low[i - 1], low[i]));
+            }
+            else
+            {
+                psar[i] = Math.Max(psar[i], Math.Max(high[i - 1], high[i]));
+            }
+        }
+
+        return psar;
+    }
+
 }

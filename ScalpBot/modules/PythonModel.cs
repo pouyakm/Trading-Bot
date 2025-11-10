@@ -33,7 +33,7 @@ public class PythonModel
         string stdout = await proc.StandardOutput.ReadToEndAsync();
         string stderr = await proc.StandardError.ReadToEndAsync();
         proc.WaitForExit(600000);
-        if (!string.IsNullOrWhiteSpace(stderr)) Console.WriteLine("[ML stderr] " + stderr);
+        if (!string.IsNullOrWhiteSpace(stderr)) ;// Console.WriteLine("[ML stderr] " + stderr);
         return stdout.Contains("\"trained\": true") || stdout.ToLower().Contains("trained");
     }
 
@@ -52,7 +52,7 @@ public class PythonModel
         string stdout = await proc.StandardOutput.ReadToEndAsync();
         string stderr = await proc.StandardError.ReadToEndAsync();
         proc.WaitForExit(10000);
-        if (!string.IsNullOrWhiteSpace(stderr)) Console.WriteLine("[ML stderr] " + stderr);
+        if (!string.IsNullOrWhiteSpace(stderr)) ;// Console.WriteLine("[ML stderr] " + stderr);
         try
         {
             var jo = JObject.Parse(stdout);

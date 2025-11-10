@@ -2,34 +2,55 @@
 
 public class Analyzer
 {
-    public int Wema = 2;
-    public int Wrsi = 1;
-    public int Wobi = 2;
-    public int Wvwap = 1;
-    public int Wmacd = 1;
-    public int Watr = 1;
-    public int Wbb = 1;
-    public int Wml = 2;
-
-    public decimal MLP_buy = 0.6m;
-    public decimal MLP_sell = 0.4m;
-    public decimal OBI_threshold = 0.08m;
-    public decimal RSI_upper = 65m;
-    public decimal RSI_lower = 35m;
-
-    public string Decide(int emaDir, decimal rsi, decimal obi, decimal price, decimal vwap, decimal macdDiff, decimal atr, decimal probUp, decimal bbUpper, decimal bbLower)
+    public string Decide(
+        int emaDir, decimal rsi, decimal obi, decimal price,
+        decimal vwap, decimal macdHist, decimal atr,
+        decimal probUp, decimal bbUpper, decimal bbLower, bool psarTrendUp)
     {
-        int score = 0;
-        score += emaDir * Wema;
-        if (rsi < RSI_upper) score += Wrsi; else score -= Wrsi;
-        if (obi > OBI_threshold) score += Wobi; else if (obi < -OBI_threshold) score -= Wobi;
-        score += (price > vwap) ? (int)Wvwap : -(int)Wvwap;
-        score += (macdDiff > 0) ? Wmacd : -Wmacd;
-        if (atr > 0 && atr / price > 0.01m) score = (int)System.Math.Round(score * 0.6);
-        if (probUp > MLP_buy) score += Wml; else if (probUp < MLP_sell) score -= Wml;
-        if (price < bbLower) score += Wbb; else if (price > bbUpper) score -= Wbb;
-        if (score >= 4) return "BUY";
-        if (score <= -4) return "SELL";
-        return "HOLD";
+        // normalize all values to -1..+1
+        decimal emaScore = emaDir; // -1 or +1
+        decimal rsiScore = (rsi - 50m) / 50m; // RSI 0-100 → -1..+1
+        decimal macdScore = Math.Clamp(macdHist / 0.001m, -1m, 1m); // normalize macd hist
+        decimal vwapScore = price > vwap ? 0.5m : -0.5m;
+        decimal atrScore = Math.Clamp(atr / price, -1m, 1m);
+        decimal obiScore = Math.Clamp(obi, -1m, 1m);
+        decimal bbScore = price > bbUpper ? -0.7m : price < bbLower ? 0.7m : 0m;
+        decimal lstmScore = (probUp - 0.5m) * 2m; // 0.5 → 0, 1 → +1, 0 → -1
+        decimal psarScore = psarTrendUp ? 0.5m : -0.5m;
+        decimal wPSAR = 0.10m;
+        
+        // weights
+        decimal wEMA = 0.25m;
+        decimal wRSI = 0.15m;
+        decimal wMACD = 0.15m;
+        decimal wVWAP = 0.10m;
+        decimal wATR = 0.05m;
+        decimal wOBI = 0.05m;
+        decimal wBB = 0.10m;
+        decimal wLSTM = 0.15m;
+
+        // weighted score
+        decimal score =
+            emaScore * wEMA +
+            rsiScore * wRSI +
+            macdScore * wMACD +
+            vwapScore * wVWAP +
+            atrScore * wATR +
+            obiScore * wOBI +
+            bbScore * wBB +
+            lstmScore * wLSTM +
+            psarScore * wPSAR;
+
+
+        // thresholds
+        decimal buyThreshold = 0.15m;
+        decimal sellThreshold = -0.15m;
+
+        if (score >= buyThreshold)
+            return "BUY";
+        else if (score <= sellThreshold)
+            return "SELL";
+        else
+            return "HOLD";
     }
 }
